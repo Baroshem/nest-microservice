@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { AppService } from './app.service';
 import { ItemDto } from './item.dto';
 
@@ -11,13 +12,13 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Post('/create')
-  createItem(@Body() itemDto: ItemDto) {
+  @MessagePattern({ role: 'item', cmd: 'create' })
+  createItem(itemDto: ItemDto) {
     return this.appService.createItem(itemDto)
   }
 
-  @Get('item/:id')
-  getItemById(@Param('id') id: number) {
+  @MessagePattern({ role: 'item', cmd: 'get-by-id' })
+  getItemById(id: number) {
     return this.appService.getItemById(id);
   }
 }
